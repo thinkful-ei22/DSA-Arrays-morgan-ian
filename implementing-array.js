@@ -114,4 +114,10 @@ console.log(testArray);
 //address is the same, because there wasnt any resizing or copying
 
 //when adding "tauhida" and printing its value we got NaN
-//
+//we cannot view the string, because the float64array class that represents
+//a memory block is only set up to store C "double" data types, which are numbers
+//not strings
+
+//the resize function allocates a new block of memory that is large enough to 
+//store the new array, factors in the size ratio as well. it frees up the old
+//memory as well 
