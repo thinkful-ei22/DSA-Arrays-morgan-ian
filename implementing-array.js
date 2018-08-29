@@ -117,6 +117,16 @@ let testArray = new Array();
 
 //when adding "tauhida" and printing its value we got NaN
 //
+//we cannot view the string, because the float64array class that represents
+//a memory block is only set up to store C "double" data types, which are numbers
+//not strings
+
+//the resize function allocates a new block of memory that is large enough to 
+//store the new array, factors in the size ratio as well. it frees up the old
+//memory as well 
+
+
+
 
 // let arr = new Array();
 // let arr2 = new Array();
@@ -130,3 +140,5 @@ let testArray = new Array();
 // arr2.push(2);
 // arr2.push(2);
 // console.log(arr2);
+
+
