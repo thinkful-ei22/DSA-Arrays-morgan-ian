@@ -1,82 +1,80 @@
-'use strict';
-
 const Memory = require('./memory');
 const memory = new Memory;
 
 class Array {
-  constructor() {
-    this.length = 0;
-    this._capacity = 0;
-    this.ptr = memory.allocate(this.length);
-  }
-
-  // push(value) {
-  //     this._resize(this.length + 1);
-  //     memory.set(this.ptr + this.length, value);
-  //     this.length++;
-  // }
-  //this one theres no extra memory, so it immediately resizes
-  //and copies the array to a new memory spot
-
-  push(value) {
-    if (this.length >= this._capacity) {
-      this._resize((this.length + 1) * Array.SIZE_RATIO);
+    constructor() {
+        this.length = 0;
+        this._capacity = 0;
+        this.ptr = memory.allocate(this.length);
     }
 
-    memory.set(this.ptr + this.length, value);
-    this.length++;
-  }
-  //checks to see if theres enough room to store the extra value,
-  //if theres not enough, it resizes and allocates extra space
+    // push(value) {
+    //     this._resize(this.length + 1);
+    //     memory.set(this.ptr + this.length, value);
+    //     this.length++;
+    // }
+    //this one theres no extra memory, so it immediately resizes
+    //and copies the array to a new memory spot
 
-  _resize(size) {
-    const oldPtr = this.ptr;
-    this.ptr = memory.allocate(size);
-    if (this.ptr === null) {
-      throw new Error('Out of memory');
+    push(value) {
+        if (this.length >= this._capacity) {
+            this._resize((this.length + 1) * Array.SIZE_RATIO);
+        }
+
+        memory.set(this.ptr + this.length, value);
+        this.length++;
     }
-    memory.copy(this.ptr, oldPtr, this.length);
-    memory.free(oldPtr);
-    this._capacity = size;
-  }
+    //checks to see if theres enough room to store the extra value,
+    //if theres not enough, it resizes and allocates extra space
 
-  get(index) {
-    if (index < 0 || index >= this.length) {
-      throw new Error('Index error');
-    }
-    return memory.get(this.ptr + index);
-  }
-
-  pop() {
-    if (this.length == 0) {
-      throw new Error('Index error');
-    }
-    const value = memory.get(this.ptr + this.length - 1);
-    this.length--;
-    return value;
-  }
-
-  insert(index, value) {
-    if (index < 0 || index >= this.length) {
-      throw new Error('Index error');
+    _resize(size) {
+        const oldPtr = this.ptr;
+        this.ptr = memory.allocate(size);
+        if (this.ptr === null) {
+            throw new Error('Out of memory');
+        }
+        memory.copy(this.ptr, oldPtr, this.length);
+        memory.free(oldPtr);
+        this._capacity = size;
     }
 
-    if (this.length >= this._capacity) {
-      this._resize((this.length + 1) * Array.SIZE_RATIO);
+    get(index) {
+        if (index < 0 || index >= this.length) {
+            throw new Error('Index error');
+        }
+        return memory.get(this.ptr + index);
     }
 
-    memory.copy(this.ptr + index + 1, this.ptr + index, this.length - index);
-    memory.set(this.ptr + index, value);
-    this.length++;
-  }
-
-  remove(index) {
-    if (index < 0 || index >= this.length) {
-      throw new Error('Index error');
+    pop() {
+        if (this.length == 0) {
+            throw new Error('Index error');
+        }
+        const value = memory.get(this.ptr + this.length - 1);
+        this.length--;
+        return value;
     }
-    memory.copy(this.ptr + index, this.ptr + index + 1, this.length - index - 1);
-    this.length--;
-  }
+
+    insert(index, value) {
+        if (index < 0 || index >= this.length) {
+            throw new Error('Index error');
+        }
+
+        if (this.length >= this._capacity) {
+            this._resize((this.length + 1) * Array.SIZE_RATIO);
+        }
+
+        memory.copy(this.ptr + index + 1, this.ptr + index, this.length - index);
+        memory.set(this.ptr + index, value);
+        this.length++;
+    }
+
+    remove(index) {
+        if (index < 0 || index >= this.length) {
+            throw new Error('Index error');
+        }
+        memory.copy(this.ptr + index, this.ptr + index + 1, this.length - index - 1);
+        this.length--;
+    }
 
 
 }
@@ -93,14 +91,14 @@ let testArray = new Array();
 // testArray.pop();
 // testArray.pop();
 // console.log(testArray.get(0));
-//testArray.push("tauhida");
-//console.log(testArray.get(0));
+testArray.push("tauhida");
+console.log(testArray.get(0));
 
 // testArray.insert(2, 15);
 // testArray.remove(2);
 // console.log(testArray.get(2));
 // testArray.pop();
-//console.log(testArray);
+console.log(testArray);
 
 //length is 1 capacity is 3 and address is 0
 
@@ -116,7 +114,6 @@ let testArray = new Array();
 //address is the same, because there wasnt any resizing or copying
 
 //when adding "tauhida" and printing its value we got NaN
-//
 //we cannot view the string, because the float64array class that represents
 //a memory block is only set up to store C "double" data types, which are numbers
 //not strings
@@ -124,21 +121,3 @@ let testArray = new Array();
 //the resize function allocates a new block of memory that is large enough to 
 //store the new array, factors in the size ratio as well. it frees up the old
 //memory as well 
-
-
-
-
-// let arr = new Array();
-// let arr2 = new Array();
-
-// arr.push(1);
-// arr.push(1);
-// arr.push(1);
-// arr.push(1);
-// console.log(arr);
-// arr2.push(2);
-// arr2.push(2);
-// arr2.push(2);
-// console.log(arr2);
-
-
